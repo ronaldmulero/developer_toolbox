@@ -1,0 +1,8 @@
+# Ignore scripts directory for now, since it is its own git repo
+scripts/
+
+# Ignore database and OS generated files
+*.sql
+*.DS_Store
+*.DS_Store?
+

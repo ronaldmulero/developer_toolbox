@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ *
+*/
+
+/* if user a member, prefill the login form */
+/* if user not yet a member, prefill registration form */
+
+function ta390_menu() {
+  $items = array();
+
+  $items['cohort'] = array(
+    'title' => 'So Far So Good!',
+    'access callback' => TRUE,
+    'page callback' => 'ta390_cohort',
+  );
+
+  return $items;
+}
+
+/**
+ *  Page callback
+ *  Prefills cohort registration/login information
+ */
+function ta390_cohort($tid = '', $email = '', $displayname = '') {
+ /* 
+ $message = t('So good, so far: ta390.');
+  $page = array(
+    '#markup' => "$message",
+    );
+  return $page;
+  */
+  //  drupal_goto('user/register');
+
+  return t('Hello @tid @email @displayname',
+  array('@tid' => $tid, '@email' => $email, '@displayname' => $displayname));
+}
+
+
+function ta390_form_user_register_form_alter(&$form, &$form_state) {
+     //   dpr($form); // Make sure you have Devel module installed. 
+  $email = 'chage@the.com';
+  $displayname = 'Bob';      
+  $form['account']['mail']['#default_value'] = $email;
+  $lang = $form['profile_display_name']['field_hplife_profile_displayname']['#language'];
+  $form['profile_display_name']['field_hplife_profile_displayname'][$lang][0]['value']['#default_value'] = $displayname;
+
+  }

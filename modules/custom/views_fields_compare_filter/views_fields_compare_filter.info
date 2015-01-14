@@ -1,0 +1,8 @@
+name = Views Fields Compare Filter
+description = Provides the ability to filter on fields comparison.
+package = Views
+core = 7.x
+dependencies[] = views
+
+files[] = views_fields_compare_filter.module
+files[] = views_fields_compare_filter_handler.inc

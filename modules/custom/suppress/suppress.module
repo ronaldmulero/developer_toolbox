@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_mail_alter().
+ *
+ * Suppress all outgoing mail - easier this way than individually finding
+ * every place that mail is sent, some of which offer no options to turn
+ * off sending.
+ *
+ * https://www.exratione.com/2012/12/efficiently-shutting-off-default-functionality-in-drupal-7/
+ */
+function suppress_mail_alter(&$message) {
+  // Don't send. Works as of core 7.12.
+  $message['send'] = FALSE;
+}

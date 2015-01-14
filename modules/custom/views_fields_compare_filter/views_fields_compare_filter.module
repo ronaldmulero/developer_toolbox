@@ -1,0 +1,29 @@
+<?php
+
+
+/**
+ * Implements hook_views_api().
+ *
+ */
+
+function views_fields_compare_filter_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+
+/**
+ * Implements hook_views_data().
+ */
+function views_fields_compare_filter_views_data() {
+  $data['views']['fields_compare'] = array(
+    'title' => t('Fields Comparison'),
+    'help' => t('Compare fields.'),
+    'filter' => array(
+      'help' => t('Use fields comparison to filter the result of the view.'),
+      'handler' => 'views_fields_compare_handler_filter',
+    )
+  );
+  return $data;
+}
