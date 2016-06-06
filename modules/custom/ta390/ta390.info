@@ -1,6 +1,0 @@
-name = TA390
-description = Sandbox module for cohort feature of the HP LIFE project
-core = 7.x
-package = HP LIFE
-
-version = "7.0-beta"

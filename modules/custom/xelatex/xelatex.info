@@ -1,3 +1,0 @@
-name = XeLaTeX
-description = Prints content as .pdf using a XeLaTeX.
-core = 7.x
