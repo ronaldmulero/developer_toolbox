@@ -151,7 +151,18 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
         foreach ($rrule['BYMONTHDAY'] as $monthday) {
           $day = $direction_days[$monthday];
           $current_day = date_repeat_set_month_day($current_day, NULL, $day['direction_count'], $day['direction'], $timezone, $modify_time);
+
+
+
+
+
+
           date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
+
+// MORE OF INTEREST
+
+
+
           if ($finished = date_repeat_is_finished($current_day, $days, $count, $end_date)) {
             $period_finished = TRUE;
           }
@@ -464,9 +475,26 @@ function date_repeat_add_dates(&$days, $current_day, $start_date, $end_date, $ex
   if ($formatted < date_format($start_date, DATE_FORMAT_DATETIME)) {
     return FALSE;
   }
-  if (in_array(date_format($current_day, 'Y-m-d'), $exceptions)) {
+
+
+/// THIS IS WHAT ACTUALLY CALCULATES THE DATES TO BE ADDED
+///
+/// ALSO SEE date_repeat_form.inc
+//
+/// IT FOCUSES ON ONE DATE, THEN CHECKS IF IT IS IN THE EXCEPTIONS, IF IT IS IT DOESN'T ADD IT TO THE LIST OF RECURRING DATES. IF YOU MODIFY IT HERE IT ALSO WON'T ADD IT TO THE RRULE, WHICH IS GOOD, NOR TO THE LIST OF SPECIFIC DATES, WHICH IS ALSO GOOD.
+
+  $exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
+  $exceptions_plus = array_merge($exceptions, $exclusion_set);
+//  dsm($exceptions);
+//  dsm($exceptions_plus);
+  if (in_array(date_format($current_day, 'Y-m-d'), $exceptions_plus)) {
+//  if (in_array(date_format($current_day, 'Y-m-d'), $exceptions)) {
+
     return FALSE;
   }
+
+
+
   if (!empty($rrule['BYDAY'])) {
     $by_days = $rrule['BYDAY'];
     foreach ($by_days as $delta => $by_day) {
