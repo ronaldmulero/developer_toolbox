@@ -9,7 +9,7 @@ include_once 'recurring_dates_exclusion_sets.features.inc';
 /**
  * Implements hook_node_form_FORM_ID_alter().
  */
-function recurring_dates_exclusion_sets_form_recurring_dates_exclusion_set_node_form_alter(&$form, &$form_state, $form_id) {
+function recurring_dates_exclusion_sets_form_event_node_form_alter(&$form, &$form_state, $form_id) {
   $form['exclude_date_sets'] = array(
     '#type' => 'checkbox',
     '#title' => t("Exclude Date Sets"),
