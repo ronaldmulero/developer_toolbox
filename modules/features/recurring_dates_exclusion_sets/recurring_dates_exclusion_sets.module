@@ -32,32 +32,17 @@ function recurring_dates_exclusion_sets_form_alter(&$form, &$form_state, $form_i
   drupal_set_message($form_id);
 }
 
+/**
+ * Implements hook_field_widget_form_alter.
+ */
 
 function recurring_dates_exclusion_sets_field_widget_form_alter(&$element, &$form_state, $context) {
 
   $field = $context['field'];
-  $instance = $context['instance'];
-  $items = $context['items'];
-  $delta = $context['delta'];
 
   if (in_array($field['type'], array('date', 'datetime', 'datestamp'))) {
     if (!empty($field['settings']['repeat'])) {
-      $element['#element_validate'][] = 'date_repeat_field_widget_validate';
-      $element['show_repeat_settings'] = array(
-        '#type' => 'checkbox',
-        '#title' => t('Repeat NEW HELLO'),
-        '#weight' => $instance['widget']['weight'] + .3,
-        '#prefix' => '<div class="date-clear">',
-        '#suffix' => '</div>',
-        '#default_value' => isset($items[$delta]['rrule']) && !empty($items[$delta]['rrule']) ? 1 : 0,
-      );
-
-      // Make changes if instance is set to be rendered as a regular field.
-      if (!empty($instance['widget']['settings']['no_fieldset'])) {
-        $element['#title'] = check_plain($instance['label']);
-        $element['#description'] = field_filter_xss($instance['description']);
-        $element['#theme_wrappers'] = array('date_form_element');
-      }
+      $element['show_repeat_settings']['#title'] = 'Repeat 6th HELLO';
     }
   }
 }
