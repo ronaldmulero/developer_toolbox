@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Recurring Dates Exclusion Sets feature.
+ */
+
+include_once 'recurring_dates_exclusion_sets.features.inc';
