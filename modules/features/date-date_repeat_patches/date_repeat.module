@@ -383,7 +383,17 @@ function date_repeat_split_rrule($rrule) {
  * Analyze a RRULE and return dates that match it.
  */
 function date_repeat_calc($rrule, $start, $end, $exceptions = array(), $timezone = NULL, $additions = array(), $exclusion_set = array()) {
+
+
+
+
 dsm($exclusion_set);
+
+
+
+
+
+
   module_load_include('inc', 'date_repeat', 'date_repeat_calc');
   return _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additions, $exclusion_set);
 }
