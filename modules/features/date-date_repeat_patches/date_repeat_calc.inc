@@ -495,7 +495,6 @@ function date_repeat_add_dates(&$days, $current_day, $start_date, $end_date, $ex
 //dsm($form_state);
 
 //  $exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
-  $exceptions_plus = array_merge($exceptions, $exclusion_set);
 //$exceptions_plus = $exceptions;
 //  dsm($exceptions);
 //  dsm($exceptions_plus);
@@ -504,7 +503,7 @@ function date_repeat_add_dates(&$days, $current_day, $start_date, $end_date, $ex
 
 
 
-
+  $exceptions_plus = array_merge($exceptions, $exclusion_set);
   if (in_array(date_format($current_day, 'Y-m-d'), $exceptions_plus)) {
 //  if (in_array(date_format($current_day, 'Y-m-d'), $exceptions)) {
 
