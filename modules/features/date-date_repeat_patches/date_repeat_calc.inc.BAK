@@ -30,7 +30,7 @@
  *
  * Compute dates that match the requested rule, within a specified date range.
  */
-function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additions, $exclusion_set) {
+function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additions) {
   module_load_include('inc', 'date_api', 'date_api_ical');
 
   if (empty($timezone)) {
@@ -157,7 +157,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
 
 
 
-          date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule, $exclusion_set);
+          date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
 
 // MORE OF INTEREST
 
@@ -208,7 +208,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
     $finished = FALSE;
     $months = !empty($rrule['BYMONTH']) ? $rrule['BYMONTH'] : array();
     while (!$finished) {
-      date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule, $exclusion_set);
+      date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
       $finished = date_repeat_is_finished($current_day, $days, $count, $end_date);
       date_modify($current_day, '+' . $jump . $modify_time);
     }
@@ -296,7 +296,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
           else {
             $current_day = date_repeat_set_year_day($current_day, $day['month'], $day['day'], $day['direction_count'], $day['direction'], $timezone, $modify_time);
           }
-          date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule, $exclusion_set);
+          date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
         }
         $finished = date_repeat_is_finished($current_day, $days, $count, $end_date);
         // Reset to beginning of period before jumping to next period.
@@ -355,7 +355,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
               $moved = TRUE;
             }
             if ($rrule['FREQ'] == 'WEEKLY' || date_format($current_day, $format) == $current_period) {
-              date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule, $exclusion_set);
+              date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
             }
           }
           $finished = date_repeat_is_finished($current_day, $days, $count, $end_date);
@@ -464,7 +464,7 @@ function date_repeat_adjust_rrule($rrule, $start_date) {
  * and that it is not in the $exceptions, nor already in the $days array,
  * and that it meets other criteria in the RRULE.
  */
-function date_repeat_add_dates(&$days, $current_day, $start_date, $end_date, $exceptions, $rrule, $exclusion_set) {
+function date_repeat_add_dates(&$days, $current_day, $start_date, $end_date, $exceptions, $rrule) {
   if (isset($rrule['COUNT']) && count($days) >= $rrule['COUNT']) {
     return FALSE;
   }
@@ -483,28 +483,10 @@ function date_repeat_add_dates(&$days, $current_day, $start_date, $end_date, $ex
 //
 /// IT FOCUSES ON ONE DATE, THEN CHECKS IF IT IS IN THE EXCEPTIONS, IF IT IS IT DOESN'T ADD IT TO THE LIST OF RECURRING DATES. IF YOU MODIFY IT HERE IT ALSO WON'T ADD IT TO THE RRULE, WHICH IS GOOD, NOR TO THE LIST OF SPECIFIC DATES, WHICH IS ALSO GOOD.
 
-
-
-
-//$my_variable = variable_get('my_form_element');
-//dsm($my_variable);
-//$form_id = 'event-node-form';
-//$form_state = form_state_defaults();
-//$form = drupal_retrieve_form($form_id, $form_state);
-//dsm($form);
-//dsm($form_state);
-
-//  $exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
+  $exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
   $exceptions_plus = array_merge($exceptions, $exclusion_set);
-//$exceptions_plus = $exceptions;
 //  dsm($exceptions);
 //  dsm($exceptions_plus);
-//  skip if in our merged array
-
-
-
-
-
   if (in_array(date_format($current_day, 'Y-m-d'), $exceptions_plus)) {
 //  if (in_array(date_format($current_day, 'Y-m-d'), $exceptions)) {
 
