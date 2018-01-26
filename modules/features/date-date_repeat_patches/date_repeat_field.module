@@ -400,90 +400,21 @@ function date_repeat_field_widget_validate($element, &$form_state) {
       $rrule_values['UNTIL']['granularity'] = serialize(drupal_map_assoc($gran));
       $rrule_values['UNTIL']['all_day'] = 0;
     }
-
-
-
-
-
-
-
-//HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-///// THIS LOCATION WOULD BE BETTER SINCE  AT THIS POINT THE FORM HAS COLLECTED THE NEW VALUES THAT
-///THE USER HAS ENTERED
-///
-///
-//after you successfully pass the exclustion_set parameter from date_repeat_form.inc you can get rid of this static one below:
-// $exclusion_set = array();
-//  $exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
-// Now just get the array from the drupal field collection selection(s)
-// of this particular $form_state
-
-//dsm($form_state);
-
-//dsm($form['field_exclude_date_sets_idea'][LANGUAGE_NONE]);
-//dsm($form_state['values']);
-//$item = $form['field_exclude_date_sets_idea'];
-//dsm($form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE]['#value_key']);
-
-
-
-
-/////YES!!!!!!!!!!!!!!!
-//dsm($form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE]);
-
-//YES returns an array of nids for the selected exclusion date sets
-$exclusion_set_ids = $form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE];
+    $exclusion_set_ids = $form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE];
 dsm($exclusion_set_ids);
-
-//$field_collection_items = field_collection_item_load_multiple(array('66681','66682'));
-//$field_collection_items = entity_load('node', array('66675'));
-//
-//
-//THIS HARDCODED TEST WORKS TO RETRIEVE THE 1,2,7  entity_ids from node 66681
-//NOW YOU JUST HAVE TO USE THOSE NUMBERS TO GET THE field_date_to_exclude_value FROM  d7_field_data_field_date_to_exclude
-//$nid = '66681';
-
-
-
-$exclusion_set = array();
-foreach($exclusion_set_ids as $exclusion_set_id) {
-  $node = node_load($exclusion_set_id);
-  //Limit to only one node for this iteration. Later allow multiple nodes.
-  $specific_field_collection_items = field_get_items('node', $node, 'field_dates_to_exclude');
-
-dsm($specific_field_collection_items);
-
-
-foreach($specific_field_collection_items as $specific_field_collection_item) {
-  $exclude_date_eid = $specific_field_collection_item['value'];
-//  dsm($exclude_date_eid);
-
-  $exclude_date = db_query('SELECT field_date_to_exclude_value FROM {field_data_field_date_to_exclude} WHERE entity_id = :eid', array(':eid' => $exclude_date_eid))->fetchField();
-//  dsm($exclude_date);
-//  $exclude_date = date_format($exclude_date, 'Y-m-d');
-  $exclude_date = date_create($exclude_date);
-  $exclude_date = date_format($exclude_date, 'Y-m-d');
-  dsm($exclude_date);
-
-
-  array_push($exclusion_set, $exclude_date);
-
-}
-
-}
-
-//dsm($specific_field_collection_items['field_dates_to_exclude']);
-
-
-//foreach($field_collection_items as $fcitem) {
-//dsm($fcitem);
-//}
-//dsm($form_state);
-
-
-
-
-//    $value = date_repeat_build_dates($rrule, $rrule_values, $field, $item);
+    $exclusion_set = array();
+    foreach($exclusion_set_ids as $exclusion_set_id) {
+      $node = node_load($exclusion_set_id);
+      $specific_field_collection_items = field_get_items('node', $node, 'field_dates_to_exclude');
+      foreach($specific_field_collection_items as $specific_field_collection_item) {
+        $exclude_date_eid = $specific_field_collection_item['value'];
+        $exclude_date = db_query('SELECT field_date_to_exclude_value FROM {field_data_field_date_to_exclude} WHERE entity_id = :eid', array(':eid' => $exclude_date_eid))->fetchField();
+        $exclude_date = date_create($exclude_date);
+        $exclude_date = date_format($exclude_date, 'Y-m-d');
+dsm($exclude_date);
+        array_push($exclusion_set, $exclude_date);
+      }
+    }
     $value = date_repeat_build_dates($rrule, $rrule_values, $field, $item, $exclusion_set);
     // Unset the delta value of the parents.
     array_pop($element['#parents']);
@@ -577,15 +508,6 @@ function date_repeat_build_dates($rrule = NULL, $rrule_values = NULL, $field, $i
     $date = date_ical_date($rdate, $timezone);
     $additions[] = date_format($date, 'Y-m-d');
   }
-
-
-// THIS IS INTERESTING BECAUSE ITS WHERE THE date_repeat_calc FUNCTION IS CALLED. TRY ADDING YOUR $exclusion_set parameter here to get it eventually to the date_repeat_calc.inc function date_repeat_add_dates.
-// BUT THERE IS NO $form nor $form_state at this point !!!!!!!!!!!!!
-//
-
-//dsm($vars);
-//dsmd
-//what if instead of $form state you just passed in the $exclusion_set cause that's all you really need
 
   $dates = date_repeat_calc($rrule, $start_datetime, $end_datetime, $exceptions, $timezone, $additions, $exclusion_set);
   $value = array();

@@ -588,44 +588,6 @@ $exclusion_set = array(
 
   $parents = $element['#array_parents'];
   $instance = implode('-', $parents);
-
-//
-//
-//
-// THIS IS WERE YOU WANT TO PULL IN THE CHOSENVALUES OF YOUR field_exclude_date_sets_idea
-// as $exclusion_set
-// and then merge the 2 into $exceptions_plus
-//
-//dsm($instance);
-
-//print_r($form_state);
-//dsm($form);
-
-
-
-//dsm($form['field_exclude_date_sets_idea'][LANGUAGE_NONE]);
-
-
-
-//dsm($form_state['values']);
-//$item = $form['field_exclude_date_sets_idea'];
-//dsm($form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE]['#value_key']);
-
-
-
-//dsm($form_state['values']['field_exclude_date_sets_idea']);
-
-
-
-//dsm($form['field_exclude_date_sets_idea'][LANGUAGE_NONE]['value']);
-
-
-//  $exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
-//  $exceptions_plus = array_merge($exceptions, $exclusion_set);
-
-
-
-
   // Make sure this will work right either in the normal
   // form or in an ajax callback from the 'Add more' button.
   if (empty($form_state['num_exceptions'][$instance])) {

@@ -475,43 +475,10 @@ function date_repeat_add_dates(&$days, $current_day, $start_date, $end_date, $ex
   if ($formatted < date_format($start_date, DATE_FORMAT_DATETIME)) {
     return FALSE;
   }
-
-
-/// THIS IS WHAT ACTUALLY CALCULATES THE DATES TO BE ADDED
-///
-/// ALSO SEE date_repeat_form.inc
-//
-/// IT FOCUSES ON ONE DATE, THEN CHECKS IF IT IS IN THE EXCEPTIONS, IF IT IS IT DOESN'T ADD IT TO THE LIST OF RECURRING DATES. IF YOU MODIFY IT HERE IT ALSO WON'T ADD IT TO THE RRULE, WHICH IS GOOD, NOR TO THE LIST OF SPECIFIC DATES, WHICH IS ALSO GOOD.
-
-
-
-
-//$my_variable = variable_get('my_form_element');
-//dsm($my_variable);
-//$form_id = 'event-node-form';
-//$form_state = form_state_defaults();
-//$form = drupal_retrieve_form($form_id, $form_state);
-//dsm($form);
-//dsm($form_state);
-
-//  $exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
-//$exceptions_plus = $exceptions;
-//  dsm($exceptions);
-//  dsm($exceptions_plus);
-//  skip if in our merged array
-
-
-
-
   $exceptions_plus = array_merge($exceptions, $exclusion_set);
   if (in_array(date_format($current_day, 'Y-m-d'), $exceptions_plus)) {
-//  if (in_array(date_format($current_day, 'Y-m-d'), $exceptions)) {
-
     return FALSE;
   }
-
-
-
   if (!empty($rrule['BYDAY'])) {
     $by_days = $rrule['BYDAY'];
     foreach ($by_days as $delta => $by_day) {
