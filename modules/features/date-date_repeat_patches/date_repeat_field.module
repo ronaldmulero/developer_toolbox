@@ -441,16 +441,19 @@ dsm($exclusion_set_ids);
 //
 //THIS HARDCODED TEST WORKS TO RETRIEVE THE 1,2,7  entity_ids from node 66681
 //NOW YOU JUST HAVE TO USE THOSE NUMBERS TO GET THE field_date_to_exclude_value FROM  d7_field_data_field_date_to_exclude
-$nid = '66681';
-$node = node_load($nid);
-//Limit to only one node for this iteration. Later allow multiple nodes.
-$specific_field_collection_items = field_get_items('node', $node, 'field_dates_to_exclude');
-
-dsm($specific_field_collection_items);
+//$nid = '66681';
 
 
 
 $exclusion_set = array();
+foreach($exclusion_set_ids as $exclusion_set_id) {
+  $node = node_load($exclusion_set_id);
+  //Limit to only one node for this iteration. Later allow multiple nodes.
+  $specific_field_collection_items = field_get_items('node', $node, 'field_dates_to_exclude');
+
+dsm($specific_field_collection_items);
+
+
 foreach($specific_field_collection_items as $specific_field_collection_item) {
   $exclude_date_eid = $specific_field_collection_item['value'];
 //  dsm($exclude_date_eid);
@@ -465,6 +468,7 @@ foreach($specific_field_collection_items as $specific_field_collection_item) {
 
   array_push($exclusion_set, $exclude_date);
 
+}
 
 }
 
