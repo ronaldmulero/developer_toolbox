@@ -81,7 +81,6 @@ RDATE:20180415T050000Z
 
 
 
-*/
 
 $exclusion_set = array(
   array('datetime' => '2018-02-01 06:00:00', 'all_day' => FALSE, 'tz' => 'UTC'),
@@ -89,14 +88,18 @@ $exclusion_set = array(
   array('datetime' => '2018-02-03 06:00:00', 'all_day' => FALSE, 'tz' => 'UTC'),
 );
 
+
+*/
+
   $parts = date_repeat_split_rrule($rrule);
 
 
   $rrule = $parts[0];
 
-//  $exceptions = $parts[1];
-  $exceptions = array_merge($parts[1], $exclusion_set);
-  dsm($exceptions);
+  $exceptions = $parts[1];
+//  $parts_one = $parts[1];
+//  $exceptions = array_merge($parts[1], $exclusion_set);
+//  dsm($exceptions);
   //need to undo this after so that $exceptions are not added to the form
   $additions = $parts[2];
   $timezone = !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone();
@@ -586,6 +589,21 @@ $exclusion_set = array(
   $parents = $element['#array_parents'];
   $instance = implode('-', $parents);
 
+//dsm($instance);
+
+//print_r($form_state);
+//dsm($form);
+
+//$exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
+
+
+
+
+//  $exceptions_plus = array_merge($exceptions, $exclusion_set);
+
+
+
+
   // Make sure this will work right either in the normal
   // form or in an ajax callback from the 'Add more' button.
   if (empty($form_state['num_exceptions'][$instance])) {
@@ -597,20 +615,42 @@ $exclusion_set = array(
   else {
     $collapsed = FALSE;
   }
+  $element['exclude_dates'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Exclude dates', array(), array('context' => 'Date repeat')),
+    '#states' => array(
+      'invisible' => array(
+        ":input[name=\"{$element['#name']}[FREQ]\"]" => array('value' => 'NONE'),
+      ),
+    ),
+    '#default_value' => empty($form_state['num_exceptions'][$instance]) ? 0 : 1,
+  );
   $element['exclude_date_sets'] = array(
     '#type' => 'checkbox',
     '#title' => t("Exclude Date Sets"),
     '#required' => FALSE,
     '#states' => array(
       'invisible' => array(
-        ":input[name=\"{$element['#name']}[FREQ]\"]" => array('value' => 'NONE'),
+        ":input[name=\"{$element['#name']}[YOUR_SELECT_LIST]\"]" => array('value' => 'NONE'),
       ),
     ),
-    '#default_value' => empty($form_state['num_set_exclusions'][$instance]) ? 0 : 1,
+    '#default_value' => empty($form_state['num_exclusions'][$instance]) ? 0 : 1,
   );
+
+  $element['exceptions_plus'] = array(
+    '#type' => 'container',
+    '#prefix' => '<div id="date-repeat-exceptions-' . $instance . '" class="date-repeat">',
+    '#suffix' => '</div>',
+    '#states' => array(
+      'visible' => array(
+        ":input[name=\"{$element['#name']}[exclude_date_sets]\"]" => array('checked' => TRUE),
+      ),
+    ),
+  );
+
   $element['show_exceptions'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Exclude specific dates', array(), array('context' => 'Date repeat')),
+    '#title' => t('Exclude individual dates', array(), array('context' => 'Date repeat')),
     '#states' => array(
       'invisible' => array(
         ":input[name=\"{$element['#name']}[FREQ]\"]" => array('value' => 'NONE'),
@@ -743,6 +783,17 @@ $exclusion_set = array(
     );
   }
 
+  $element['exceptions_plus']['exceptions_plus_add'] = array(
+    '#type' => 'submit',
+    '#name' => 'exceptions_plus_add|' . $instance,
+    '#value' => t('Add exception set'),
+    '#submit' => array('date_repeat_add_exception'),
+    '#limit_validation_errors' => array(),
+    '#ajax' => array(
+      'callback' => 'date_repeat_add_exception_plus_callback',
+      'wrapper' => 'date-repeat-exceptions-' . $instance,
+    ),
+  );
   $element['exceptions']['exceptions_add'] = array(
     '#type' => 'submit',
     '#name' => 'exceptions_add|' . $instance,
@@ -767,6 +818,16 @@ $exclusion_set = array(
   );
 
   $element['#date_repeat_collapsed'] = !empty($rrule['INTERVAL']) || !empty($rrule['FREQ']) ? 0 : (!empty($element['#date_repeat_collapsed']) ? $element['#date_repeat_collapsed'] : 0);
+  return $element;
+}
+
+/**
+ * Add callback to date repeat.
+ */
+function date_repeat_add_exception_plus_callback($form, &$form_state) {
+  $parents = $form_state['triggering_element']['#array_parents'];
+  $button_key = array_pop($parents);
+  $element = drupal_array_get_nested_value($form, $parents);
   return $element;
 }
 
