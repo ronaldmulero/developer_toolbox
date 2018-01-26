@@ -414,7 +414,7 @@ function date_repeat_field_widget_validate($element, &$form_state) {
 ///
 //after you successfully pass the exclustion_set parameter from date_repeat_form.inc you can get rid of this static one below:
 // $exclusion_set = array();
-  $exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
+//  $exclusion_set = array('2018-02-01', '2018-02-02', '2018-02-03');
 // Now just get the array from the drupal field collection selection(s)
 // of this particular $form_state
 
@@ -448,6 +448,9 @@ $specific_field_collection_items = field_get_items('node', $node, 'field_dates_t
 
 dsm($specific_field_collection_items);
 
+
+
+$exclusion_set = array();
 foreach($specific_field_collection_items as $specific_field_collection_item) {
   $exclude_date_eid = $specific_field_collection_item['value'];
 //  dsm($exclude_date_eid);
@@ -458,6 +461,10 @@ foreach($specific_field_collection_items as $specific_field_collection_item) {
   $exclude_date = date_create($exclude_date);
   $exclude_date = date_format($exclude_date, 'Y-m-d');
   dsm($exclude_date);
+
+
+  array_push($exclusion_set, $exclude_date);
+
 
 }
 
