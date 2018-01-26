@@ -431,6 +431,7 @@ function date_repeat_field_widget_validate($element, &$form_state) {
 /////YES!!!!!!!!!!!!!!!
 //dsm($form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE]);
 
+//YES returns an array of nids for the selected exclusion date sets
 $exclusion_set_ids = $form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE];
 dsm($exclusion_set_ids);
 
@@ -445,7 +446,13 @@ $node = node_load($nid);
 //Limit to only one node for this iteration. Later allow multiple nodes.
 $specific_field_collection_items = field_get_items('node', $node, 'field_dates_to_exclude');
 
-//dsm($specific_field_collection_items);
+dsm($specific_field_collection_items);
+
+foreach($specific_field_collection_items as $specific_field_collection_item) {
+  $exclude_date_eid = $specific_field_collection_item['value'];
+  dsm($exclude_date_eid);
+}
+
 //dsm($specific_field_collection_items['field_dates_to_exclude']);
 
 
