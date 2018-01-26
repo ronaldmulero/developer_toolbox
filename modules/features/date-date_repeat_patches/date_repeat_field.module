@@ -450,10 +450,15 @@ dsm($specific_field_collection_items);
 
 foreach($specific_field_collection_items as $specific_field_collection_item) {
   $exclude_date_eid = $specific_field_collection_item['value'];
-  dsm($exclude_date_eid);
+//  dsm($exclude_date_eid);
 
   $exclude_date = db_query('SELECT field_date_to_exclude_value FROM {field_data_field_date_to_exclude} WHERE entity_id = :eid', array(':eid' => $exclude_date_eid))->fetchField();
+//  dsm($exclude_date);
+//  $exclude_date = date_format($exclude_date, 'Y-m-d');
+  $exclude_date = date_create($exclude_date);
+  $exclude_date = date_format($exclude_date, 'Y-m-d');
   dsm($exclude_date);
+
 }
 
 //dsm($specific_field_collection_items['field_dates_to_exclude']);
