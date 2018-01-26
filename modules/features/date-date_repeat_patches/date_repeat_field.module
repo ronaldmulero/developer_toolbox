@@ -429,10 +429,29 @@ function date_repeat_field_widget_validate($element, &$form_state) {
 
 
 /////YES!!!!!!!!!!!!!!!
-dsm($form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE]);
+//dsm($form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE]);
+
+$exclusion_set_ids = $form_state['values']['field_exclude_date_sets_idea'][LANGUAGE_NONE];
+dsm($exclusion_set_ids);
+
+//$field_collection_items = field_collection_item_load_multiple(array('66681','66682'));
+//$field_collection_items = entity_load('node', array('66675'));
+//
+//
+//THIS HARDCODED TEST WORKS TO RETRIEVE THE 1,2,7  entity_ids from node 66681
+//NOW YOU JUST HAVE TO USE THOSE NUMBERS TO GET THE field_date_to_exclude_value FROM  d7_field_data_field_date_to_exclude
+$nid = '66681';
+$node = node_load($nid);
+//Limit to only one node for this iteration. Later allow multiple nodes.
+$specific_field_collection_items = field_get_items('node', $node, 'field_dates_to_exclude');
+
+//dsm($specific_field_collection_items);
+//dsm($specific_field_collection_items['field_dates_to_exclude']);
 
 
-
+//foreach($field_collection_items as $fcitem) {
+//dsm($fcitem);
+//}
 //dsm($form_state);
 
 
